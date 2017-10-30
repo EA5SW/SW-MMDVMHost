@@ -29,5 +29,7 @@ This mod are for OLED and Nextion displays and included work from ON7LDS for TA 
 
 You need some experience with Nextion Editor and edit of cpp files to compile MMDVMHost to your needs.
 
+All work are based in Raspberry Pi and its possible that some code don't work in another platform.
+
 
 This software is licenced under the GPL v2 and is intended for amateur and educational use only. Use of this software for commercial purposes is strictly forbidden.
