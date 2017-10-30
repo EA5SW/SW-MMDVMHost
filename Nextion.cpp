@@ -325,10 +325,224 @@ if (strcmp(type,"R") == 0) {
 
 
 		::sprintf(text, "t2.txt=\"%s %s\"", type, src.c_str());
+		
+
+
+// Comparador de indicativos
+
+
+if ((strncmp (src.c_str(),"EA1",3) == 0) || (strncmp (src.c_str(),"EB1",3) == 0) || (strncmp (src.c_str(),"EC1",3) == 0))
+{
+printf ("Es un EA1\n");
+        char text[130U];
+         ::sprintf(text, "p0.pic=6");
+	sendCommand(text);
+}
+
+else if ((strncmp (src.c_str(),"EA2",3) == 0) || (strncmp (src.c_str(),"EB2",3) == 0) || (strncmp (src.c_str(),"EC2",3) == 0))
+{
+printf ("Es un EA2\n");
+        char text[130U];
+	::sprintf(text, "p0.pic=7");
+	sendCommand(text);
+}
+
+else if ((strncmp (src.c_str(),"EA3",3) == 0) || (strncmp (src.c_str(),"EB3",3) == 0) || (strncmp (src.c_str(),"EC3",3) == 0))
+{
+printf ("Es un EA3\n");
+        char text[130U];
+	::sprintf(text, "p0.pic=8");
+	sendCommand(text);
+}
+else if ((strncmp (src.c_str(),"EA4",3) == 0) || (strncmp (src.c_str(),"EB4",3) == 0) || (strncmp (src.c_str(),"EC4",3) == 0))
+{
+printf ("Es un EA4\n");
+        char text[130U];
+	::sprintf(text, "p0.pic=9");
+	sendCommand(text);
+}
+else if ((strncmp (src.c_str(),"EA5",3) == 0) || (strncmp (src.c_str(),"EB5",3) == 0) || (strncmp (src.c_str(),"EC5",3) == 0))
+{
+printf ("Es un EA5\n");
+        char text[130U];
+	::sprintf(text, "p0.pic=10");
+	sendCommand(text);
+}
+
+else if ((strncmp (src.c_str(),"EA6",3) == 0) || (strncmp (src.c_str(),"EB6",3) == 0) || (strncmp (src.c_str(),"EC6",3) == 0))
+{
+printf ("Es un EA6\n");
+        char text[130U];
+	::sprintf(text, "p0.pic=11");
+	sendCommand(text);
+}
+
+else if ((strncmp (src.c_str(),"EA7",3) == 0) || (strncmp (src.c_str(),"EB7",3) == 0) || (strncmp (src.c_str(),"EC7",3) == 0))
+{
+printf ("Es un EA7\n");
+        char text[130U];
+	::sprintf(text, "p0.pic=12");
+	sendCommand(text);
+}
+else if ((strncmp (src.c_str(),"EA8",3) == 0) || (strncmp (src.c_str(),"EB8",3) == 0) || (strncmp (src.c_str(),"EC8",3) == 0))
+{
+printf ("Es un EA8\n");
+        char text[130U];
+	::sprintf(text, "p0.pic=13");
+	sendCommand(text);
+}
+else if ((strncmp (src.c_str(),"EA9",3) == 0) || (strncmp (src.c_str(),"EB9",3) == 0) || (strncmp (src.c_str(),"EC9",3) == 0))
+{
+printf ("Es un EA9\n");
+        char text[130U];
+	::sprintf(text, "p0.pic=14");
+	sendCommand(text);
+}
+
+else if (strncmp (src.c_str(),"9990",4) == 0) 
+{
+printf ("Es el Loro\n");
+        char text[130U];
+	::sprintf(text, "p0.pic=18");
+	sendCommand(text);
+}
+
+else if (strncmp (src.c_str(),"4000",4) == 0) 
+{
+printf ("Desconectado\n");
+        char text[130U];
+	::sprintf(text, "p0.pic=17");
+	sendCommand(text);
+}
+
+else {
+// if (strcmp ("000",src.c_str()) ==0) {
+printf ("No es EA\n");
+//        char text[130U];
+//	::sprintf(text, "p0.pic=4");
+//	sendCommand(text);
+}
+
+
 		sendCommand("t2.font=11");
 		sendCommand(text);
 
+
+
+
 		::sprintf(text, "t3.txt=\"%s%s\"", group ? "TG: " : "", dst.c_str());
+
+
+//Comparador TG para banderas
+
+if (strcmp ("21446",dst.c_str()) ==0) {
+printf ("Grupo Provincial Valencia\n");
+        char text[130U];
+	::sprintf(text, "p5.pic=33");
+	sendCommand(text);
+}
+else if (strcmp ("214",dst.c_str()) ==0) {
+printf ("Grupo Nacional EA\n");
+        char text[130U];
+	::sprintf(text, "p5.pic=30");
+	sendCommand(text);
+}
+else if (strcmp ("2141",dst.c_str()) ==0) {
+printf ("Grupo Regional EA1\n");
+        char text[130U];
+	::sprintf(text, "p5.pic=21");
+	sendCommand(text);
+
+}
+else if (strcmp ("2142",dst.c_str()) ==0) {
+printf ("Grupo Regional EA2\n");
+        char text[130U];
+	::sprintf(text, "p5.pic=22");
+	sendCommand(text);
+
+}
+else if (strcmp ("2143",dst.c_str()) ==0) {
+printf ("Grupo Regional EA3\n");
+        char text[130U];
+	::sprintf(text, "p5.pic=23");
+	sendCommand(text);
+
+}
+else if (strcmp ("2144",dst.c_str()) ==0) {
+printf ("Grupo Regional EA4\n");
+        char text[130U];
+	::sprintf(text, "p5.pic=24");
+	sendCommand(text);
+
+}
+else if (strcmp ("2145",dst.c_str()) ==0) {
+printf ("Grupo Regional EA5\n");
+        char text[130U];
+	::sprintf(text, "p5.pic=25");
+	sendCommand(text);
+}
+else if (strcmp ("2146",dst.c_str()) ==0) {
+printf ("Grupo Regional EA6\n");
+        char text[130U];
+	::sprintf(text, "p5.pic=26");
+	sendCommand(text);
+
+}
+else if (strcmp ("2147",dst.c_str()) ==0) {
+printf ("Grupo Regional EA7\n");
+        char text[130U];
+	::sprintf(text, "p5.pic=27");
+	sendCommand(text);
+
+}
+else if (strcmp ("2148",dst.c_str()) ==0) {
+printf ("Grupo Regional EA8\n");
+        char text[130U];
+	::sprintf(text, "p5.pic=28");
+	sendCommand(text);
+
+}
+else if (strcmp ("2149",dst.c_str()) ==0) {
+printf ("Grupo Regional EA9\n");
+        char text[130U];
+	::sprintf(text, "p5.pic=29");
+	sendCommand(text);
+
+}
+else if (strcmp ("214112",dst.c_str()) ==0) {
+printf ("Emcom España\n");
+        char text[130U];
+	::sprintf(text, "p5.pic=35");
+	sendCommand(text);
+}
+else if (strcmp ("4000",dst.c_str()) ==0) {
+printf ("Desconectado\n");
+        char text[130U];
+	::sprintf(text, "p5.pic=34");
+	sendCommand(text);
+}
+else if (strcmp ("EA5SW",dst.c_str()) ==0) {
+printf ("Yo mismo\n");
+        char text[130U];
+	::sprintf(text, "p5.pic=19");
+	sendCommand(text);
+}
+
+else if (strcmp ("9990",dst.c_str()) ==0) {
+printf ("Loro\n");
+        char text[130U];
+	::sprintf(text, "p5.pic=31");
+	sendCommand(text);
+
+}
+else 
+ {
+printf ("Otro grupo del infinito\n");
+        char text[130U];
+	::sprintf(text, "p5.pic=32");
+	sendCommand(text);
+
+}
 
 
 
@@ -651,6 +865,8 @@ void CNextion::clearDMRInt(unsigned int slotNo)
 		sendCommand("t3.txt=\"\"");
 		sendCommand("t5.txt=\"\"");
 		sendCommand("t7.txt=\"\"");
+		sendCommand("p0.pic=4");
+		sendCommand("p5.pic=32");
 	}
 }
 
