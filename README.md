@@ -23,4 +23,11 @@ The OLED display needs a extra library see OLED.md
 
 The LCDproc support enables the use of a multitude of other LCD screens. See the [supported devices](http://lcdproc.omnipotent.net/hardware.php3) page on the LCDproc website for more info.
 
+NOTE FROM EA5SW
+
+This mod are for OLED and Nextion displays and included work from ON7LDS for TA and IP adress display, I modified code oriented to Hotspots, DVmega,HS_Hat, MMDMV modems for SlotTime 2 and DMR Only.
+
+You need some experience with Nextion Editor and edit of cpp files to compile MMDVMHost to your needs.
+
+
 This software is licenced under the GPL v2 and is intended for amateur and educational use only. Use of this software for commercial purposes is strictly forbidden.
