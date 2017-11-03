@@ -21,6 +21,12 @@
 #include "Network.h"
 #include "DMRSlot.h"
 
+
+#include <iostream>
+#include <cstring>
+#include <stdint.h>
+#include "INI.h"
+
 #include <cstdio>
 #include <cassert>
 #include <cstring>
@@ -59,6 +65,8 @@ const unsigned int YSF_BER_COUNT    = 13U;		// 13 * 100ms = 1300ms
 const unsigned int P25_RSSI_COUNT   = 7U;		  // 7 * 180ms = 1260ms
 const unsigned int P25_BER_COUNT    = 7U;		  // 7 * 180ms = 1260ms
 
+
+
 CNextion::CNextion(const std::string& callsign, unsigned int dmrid, ISerialPort* serial, unsigned int brightness, bool displayClock, bool utc, unsigned int idleBrightness) :
 CDisplay(),
 m_callsign(callsign),
@@ -84,15 +92,23 @@ m_maxRSSI(0U),
 m_minRSSI(0U),
 m_aveRSSI(0U)
 
+
 {
 	assert(serial != NULL);
 	assert(brightness >= 0U && brightness <= 100U);
 }
 
+
+
 CNextion::~CNextion()
 {
 }
 
+
+using namespace std;
+
+void centerString(string str); //Printing to console
+std::string getStringFromFile(const std::string& path); //Source for data loading from memory.
 
 
 bool CNextion::open()
@@ -114,35 +130,71 @@ bool CNextion::open()
 
 	sendCommand("bkcmd=0");
 
+
 	setIdle();
 
 	return true;
 }
 
 
+
+
+
 void CNextion::setIdleInt()
+
+
+
 {
+
+
+
+// INI File Read
+
+   typedef INI<> ini_t; 
+   ini_t ini("/home/pi/Nextion.ini", true);
+ //  centerString("Reading Nextion.ini");
+
+   ini.select("Info");
+   string loc1= ini.get("Location");
+   string fre1= ini.get("Freq");
+   string net1= ini.get("Net");
+ //  cout <<"Loc:" <<loc1 <<" Freq:" <<fre1 <<" Net:" <<net1 <<"\n";
+
+
+
+
+     ini.clear();
+     ini.parse();  //Parses file into objects in memory
+
+ 
+
 	sendCommand("page MMDVM");
 
-	char command[50];
+	char command[20];
 	::sprintf(command, "dim=%u", m_idleBrightness);
 	sendCommand(command);
-	::sprintf(command, "t0.txt=\"%s/%u\"", m_callsign.c_str(), m_dmrid);
+	char command1[20U];
+	::sprintf(command1, "t0.txt=\"%s/%u\"", m_callsign.c_str(), m_dmrid);
+	sendCommand(command1);
+	char command2[20U];
+        ::sprintf(command2, "t30.txt=\"%s\"", loc1.c_str());
+	sendCommand(command2);
+	char command3[20U];
+        ::sprintf(command3, "t31.txt=\"%s\"", fre1.c_str());      
+	sendCommand(command3);
+	char command4[20U];
+        ::sprintf(command4, "t1.txt=\"%s\"", net1.c_str());
+	sendCommand(command4);
 
+//       sendCommand(command);
+//      ::sprintf(command, "t0.txt=\"%s/%u\"", m_callsign.c_str(), m_dmrid);
+//      ::sprintf(command, "t30.txt=\"%s\"", loc1.c_str());
+//      ::sprintf(command, "t31.txt=\"%s\"", fre1.c_str());
+//      ::sprintf(command, "t1.txt=\"%s\"", net1.c_str());
+//      sendCommand(command);
 
-
-
-       sendCommand(command);
-        ::sprintf(command, "t0.txt=\"%s/%u\"", m_callsign.c_str(), m_dmrid);
-
-
-	sendCommand("t1.txt=\"BrandMeister\"");
-	sendCommand("t30.txt=\"Valencia - IM99TK\"") ;
-	sendCommand("t31.txt=\"439.9625\"");
         sendCommand("t36.pco=60965");
 	sendCommand("t36.txt=\"Idle\"");
-
-
 
 
 
@@ -287,6 +339,7 @@ void CNextion::writeDMRInt(unsigned int slotNo, const std::string& src, bool gro
 
 	if (m_mode != MODE_DMR) {
 		sendCommand("page DMR");
+
 //printf ("Pagina DMR\n");
 
 
@@ -325,11 +378,180 @@ if (strcmp(type,"R") == 0) {
 
 
 		::sprintf(text, "t2.txt=\"%s %s\"", type, src.c_str());
+		
+
+// INI Read Section TG & Callsign
+
+   typedef INI<> ini_t; 
+   ini_t ini("/home/pi/Nextion.ini", true);
+
+// READ INI TALKGROUPS
+
+ini.select("TGP");
+
+string TG_temp[65];
+string TGx[65];
+const char* p_c_str_[65];
+
+
+for (int x=0;x<65;x=x+1)
+{
+	TG_temp[x]="TGP"+std::to_string(x);
+ 	TGx[x]=ini.get(TG_temp[x]);
+	p_c_str_[x] = TGx[x].c_str();
+}
+
+// READ INI SYSOP
+
+   ini.select("Owner");
+
+   string callsign = ini.get("Call");
+   const char* p_c_call = callsign.c_str();
+
+// READ INI CONTROL
+
+   ini.select("CONTROL");
+
+   string CTRLX = ini.get("ONOF");
+   const char* p_c_ctrlx = CTRLX.c_str();
+   string CTRL0 = ini.get("SHUT");
+   const char* p_c_ctrl0 = CTRL0.c_str();
+   string CTRL1 = ini.get("REBO");
+   const char* p_c_ctrl1 = CTRL1.c_str();
+
+
+// RED INI PREFIXES
+
+   ini.select("WPX");
+
+string PXa_temp[10];
+string PX_a[10];
+const char* p_c_pfa[10];
+string PXb_temp[10];
+string PX_b[10];
+const char* p_c_pfb[10];
+string PXc_temp[10];
+string PX_c[10];
+const char* p_c_pfc[10];
+
+
+for (int y=0;y<10;y=y+1)
+{
+	PXa_temp[y]="PXA"+std::to_string(y);
+ 	PX_a[y]=ini.get(PXa_temp[y]);
+	p_c_pfa[y] = PX_a[y].c_str();
+
+	PXb_temp[y]="PXB"+std::to_string(y);
+ 	PX_b[y]=ini.get(PXb_temp[y]);
+	p_c_pfb[y] = PX_b[y].c_str();
+
+	PXc_temp[y]="PXC"+std::to_string(y);
+ 	PX_c[y]=ini.get(PXc_temp[y]);
+	p_c_pfc[y] = PX_c[y].c_str();
+}
+
+
+
+// Compare Prefixes
+
+for (int p_f=0;p_f<10;p_f=p_f+1)
+
+if ((strncmp (src.c_str(),p_c_pfa[p_f],3) == 0) || (strncmp (src.c_str(),p_c_pfb[p_f],3) == 0) || (strncmp (src.c_str(),p_c_pfc[p_f],3) == 0))
+{
+        char text[130U];
+	int p_i=p_f+20;
+	::sprintf(text, "p0.pic=%d",p_i);
+	sendCommand(text);
+}
+
+// FIXED PREFIXES
+
+else if (strcmp (src.c_str(),"9990") == 0) 
+{
+        char text[130U];
+	::sprintf(text, "p0.pic=6");
+	sendCommand(text);
+}
+
+else if (strcmp (src.c_str(),"4000") == 0) 
+{
+        char text[130U];
+	::sprintf(text, "p0.pic=10");
+	sendCommand(text);
+}
+
+else {
+}
+
+
+   ini.clear();
+   ini.parse();  //Parses file into objects in memory
+
+
+
 		sendCommand("t2.font=11");
 		sendCommand(text);
 
+// Compare ShutDown Routines
+
+if ((strcmp (p_c_ctrl1,dst.c_str()) ==0) && (strncmp (src.c_str(),p_c_call,6) == 0) && (strcmp ("1",p_c_ctrlx) == 0)) 
+{
+	printf ("Reboot NOW\n");
+	system("sudo shutdown -r now");
+}
+
+else if ((strcmp (p_c_ctrl0,dst.c_str()) ==0) && (strncmp (src.c_str(),p_c_call,6) == 0) && (strcmp ("1",p_c_ctrlx) == 0)) 
+{
+printf ("Shutdown NOW\n");
+system("sudo shutdown -h now");
+close();
+}
+
 		::sprintf(text, "t3.txt=\"%s%s\"", group ? "TG: " : "", dst.c_str());
 
+
+// Compare TG and write Flags
+
+for (int flag=0;flag<65;flag=flag+1)
+{
+if (strcmp (p_c_str_[flag],dst.c_str()) ==0) {
+        char text[130U];
+int pi=flag+30;
+	::sprintf(text, "p5.pic=%d",pi);
+	sendCommand(text);
+}
+
+
+
+// TG's Fijos
+
+else if ((strcmp ("9",dst.c_str()) ==0)||(strcmp ("8",dst.c_str()) ==0)) {
+        char text[130U];
+	::sprintf(text, "p5.pic=12");
+	sendCommand(text);
+}
+else if (strcmp ("4000",dst.c_str()) ==0) {
+        char text[130U];
+	::sprintf(text, "p5.pic=11");
+	sendCommand(text);
+}
+else if (strcmp (p_c_call,dst.c_str()) ==0) {
+        char text[130U];
+	::sprintf(text, "p5.pic=9");
+	sendCommand(text);
+}
+else if (strcmp ("9990",dst.c_str()) ==0) {
+        char text[130U];
+	::sprintf(text, "p5.pic=7");
+	sendCommand(text);
+}
+else 
+ {
+// No group programmed
+        char text[130U];
+//	::sprintf(text, "p5.pic=5");
+	sendCommand(text);
+}}
 
 
                 sendCommand ("t5.txt=\"RSSI: -10udBm\"");
@@ -396,158 +618,98 @@ int smeter= (m_rssiAccum2/3);
 if (smeter <= 150 && smeter >= 141) //S1 =8
 
 {
-
         char command[30];
 	::sprintf(command, "j0.val=8");
 	sendCommand(command);
 }
-
 else if (smeter <= 141 && smeter >= 135) //S2= 18
-
-{ 
-  
+{  
         char command[30];
 	::sprintf(command, "j0.val=18");
 	sendCommand(command);
 }
-
-
 else if (smeter <= 135 && smeter >= 129) //S3= 20
-
-{ 
-  
+{  
         char command[30];
 	::sprintf(command, "j0.val=20");
 	sendCommand(command);
 }
-
-
 else if (smeter <= 129 && smeter>= 123) //S4=23
-
-{ 
-  
+{   
         char command[30];
 	::sprintf(command, "j0.val=23");
 	sendCommand(command);
 }
-
-
 if (smeter <= 123 && smeter >= 117) //S5=28
-
 {
-
-  
         char command[30];
 	::sprintf(command, "j0.val=28");
 	sendCommand(command);
 }
-
 else if (smeter <= 117 && smeter >= 111) //S6=32
-
-{ 
-  
+{  
         char command[30];
 	::sprintf(command, "j0.val=32");
 	sendCommand(command);
 }
-
-
 else if (smeter <=111  && smeter >= 105) //S7=38
-
-{ 
-  
-        char command[30];
+{
+         char command[30];
 	::sprintf(command, "j0.val=38");
 	sendCommand(command);
 }
-
-
 else if (smeter <= 105 && smeter>= 99) //S8=43
-
-{ 
-  
+{
         char command[30];
 	::sprintf(command, "j0.val=43");
 	sendCommand(command);
 }
-
-if (smeter <= 99 && smeter >= 93) //S9= 48
-
+else if (smeter <= 99 && smeter >= 93) //S9= 48
 {
-
-  
         char command[30];
 	::sprintf(command, "j0.val=48");
 	sendCommand(command);
 }
-
 else if (smeter <= 93 && smeter >= 83) //S9+10=55
-
-{ 
-  
+{  
         char command[30];
 	::sprintf(command, "j0.val=55");
 	sendCommand(command);
 }
-
-
 else if (smeter <= 83 && smeter >= 73) //S9+20 =67
-
-{ 
-  
+{  
         char command[30];
 	::sprintf(command, "j0.val=67");
 	sendCommand(command);
 }
-
-
 else if (smeter <= 73 && smeter>= 63) //S9+30 = 72
-
-{ 
-  
+{   
         char command[30];
 	::sprintf(command, "j0.val=72");
 	sendCommand(command);
 }
-
-if (smeter <= 53 && smeter >= 43) //S9+40=82
-
+else if (smeter <= 53 && smeter >= 43) //S9+40=82
 {
-
-
         char command[30];
 	::sprintf(command, "j0.val=82");
 	sendCommand(command);
 }
-
 else if (smeter <= 43 && smeter >= 33) //S9+50 =88
-
-
 { 
-
         char command[30];
 	::sprintf(command, "j0.val=88");
 	sendCommand(command);
 }
-
-
 else if (smeter <= 33 && smeter >= 10) //S9+60 =100
-
 { 
-
         char command[30];
 	::sprintf(command, "j0.val=100");
 	sendCommand(command);
 }
 
 
-
-
-
 			m_rssiAccum2 = 0U;
 			m_rssiCount2 = 1U;
-
-
 
 		}
 	}
@@ -555,6 +717,7 @@ else if (smeter <= 33 && smeter >= 10) //S9+60 =100
 
 
 void CNextion::writeDMRTAInt(unsigned int slotNo,  unsigned char* talkerAlias, const char* type)
+
 {
     char text[40U];
 
@@ -572,6 +735,7 @@ void CNextion::writeDMRTAInt(unsigned int slotNo,  unsigned char* talkerAlias, c
 	//SLOT1
     } else {
 	::sprintf(text, "t2.txt=\"%s %s\"",type,talkerAlias);
+
 	if (strlen((char*)talkerAlias)>16-4) sendCommand("t2.font=11");
 	if (strlen((char*)talkerAlias)>20-4) sendCommand("t2.font=11");
 	if (strlen((char*)talkerAlias)>24-4) sendCommand("t2.font=11");
@@ -628,9 +792,6 @@ void CNextion::writeDMRBERInt(unsigned int slotNo, float ber)
 			m_berCount2 = 1U;
 
 
-
-
-
 		}
 	}
 }
@@ -651,6 +812,8 @@ void CNextion::clearDMRInt(unsigned int slotNo)
 		sendCommand("t3.txt=\"\"");
 		sendCommand("t5.txt=\"\"");
 		sendCommand("t7.txt=\"\"");
+		sendCommand("p0.pic=4");
+		sendCommand("p5.pic=5");
 	}
 }
 
@@ -892,8 +1055,9 @@ fclose (temperatureFile);
 void CNextion::close()
 {
 	sendCommand("page MMDVM");
-	sendCommand("t1.txt=\"MMDVM STOPPED\"");
-	sendCommand("t30.txt=\"MMDVM STOPPED\"");
+	sendCommand("t1.txt=\"MMDVM STOP\"");
+	sendCommand("t0.txt=\"MMDVM PARADO\"");
+	sendCommand("t30.txt=\"MMDVM STOP\"");
 	m_serial->close();
 	delete m_serial;
 }
@@ -905,3 +1069,21 @@ void CNextion::sendCommand(const char* command)
 	m_serial->write((unsigned char*)command, ::strlen(command));
 	m_serial->write((unsigned char*)"\xFF\xFF\xFF", 3U);
 }
+
+void centerString(string str)
+{
+   const char* s = str.c_str();
+   int l = strlen(s);
+   int pos = (int)((80 - l) / 2);
+   for(int i = 0; i < pos; i++)
+   cout << " ";
+   cout << s << endl;
+}
+
+std::string getStringFromFile(const std::string& path) {
+  std::ostringstream buf;
+  std::ifstream input (path.c_str());
+  buf << input.rdbuf();
+  return buf.str();
+}
+
