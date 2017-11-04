@@ -72,7 +72,7 @@ The TG list are from picture 30 to picture 94, and works same that prefix, the l
 
 example:
 the TG localed in (TG0=214) when receive a transmission of this TG displays the picture 30 in the Nextion, 214 (EA national Talkgroup) have the picture 30
-example of chaange: If yoy want receive the 3100 USA Talkgroup  replace the image in the Nextion display (picture 30) for a USA Flag, change the entry in Nextion.ini TG0=21 for TG=3100
+example of chaange: If yoy want receive the 3100 USA Talkgroup  replace the image in the Nextion display (picture 30) for a USA Flag, change the entry in Nextion.ini TG0=214 for TG=3100
 
 Remember that any change in Nextion.ini are needed to change in the Nextion Screen and upload again to the display.
 
