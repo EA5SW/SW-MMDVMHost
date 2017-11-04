@@ -79,7 +79,7 @@ Remember that any change in Nextion.ini are needed to change in the Nextion Scre
 Last section are remote control: [CONTROL]
 You control if is active when ONOFF=1 or deactivate when ONOFF=0
 SHUT=99998 are Shutdown TG to transmit to shutdown the Pi
-REBO=99999 are Reboot TG to transmit to shutdown the Pi
+REBO=99999 are Reboot TG to transmit to reboot the Pi
 Only the Owner  callsign are allowed to TX into those TG to activate functions.
 
 Thanks to the effort of:
