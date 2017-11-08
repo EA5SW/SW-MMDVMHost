@@ -186,12 +186,7 @@ void CNextion::setIdleInt()
         ::sprintf(command4, "t1.txt=\"%s\"", net1.c_str());
 	sendCommand(command4);
 
-//       sendCommand(command);
-//      ::sprintf(command, "t0.txt=\"%s/%u\"", m_callsign.c_str(), m_dmrid);
-//      ::sprintf(command, "t30.txt=\"%s\"", loc1.c_str());
-//      ::sprintf(command, "t31.txt=\"%s\"", fre1.c_str());
-//      ::sprintf(command, "t1.txt=\"%s\"", net1.c_str());
-//      sendCommand(command);
+
 
         sendCommand("t36.pco=60965");
 	sendCommand("t36.txt=\"Idle\"");
@@ -389,13 +384,15 @@ if (strcmp(type,"R") == 0) {
 
 ini.select("TGP");
 
-string TG_temp[65];
-string TGx[65];
-const char* p_c_str_[65];
+string TG_temp[131];
+string TGx[131];
+const char* p_c_str_[131];
 
 
-for (int x=0;x<65;x=x+1)
+for (int x=0;x<131;x=x+1)
+
 {
+//cout <<x<<"\n";
 	TG_temp[x]="TGP"+std::to_string(x);
  	TGx[x]=ini.get(TG_temp[x]);
 	p_c_str_[x] = TGx[x].c_str();
@@ -418,9 +415,15 @@ for (int x=0;x<65;x=x+1)
    const char* p_c_ctrl0 = CTRL0.c_str();
    string CTRL1 = ini.get("REBO");
    const char* p_c_ctrl1 = CTRL1.c_str();
+   string CTRL2 = ini.get("PLUS");
+   const char* p_c_ctrl2 = CTRL2.c_str();
+   string CTRL3 = ini.get("GATE");
+   const char* p_c_ctrl3 = CTRL3.c_str();
+   string CTRL4 = ini.get("BDMS");
+   const char* p_c_ctrl4 = CTRL4.c_str();
 
 
-// RED INI PREFIXES
+// READ INI PREFIXES
 
    ini.select("WPX");
 
@@ -507,13 +510,33 @@ system("sudo shutdown -h now");
 close();
 }
 
+else if ((strcmp (p_c_ctrl2,dst.c_str()) ==0) && (strncmp (src.c_str(),p_c_call,6) == 0) && (strcmp ("1",p_c_ctrlx) == 0)) 
+{
+printf ("DmrPlusmode\n");
+system("mm_dmrplus");
+}
+
+else if ((strcmp (p_c_ctrl3,dst.c_str()) ==0) && (strncmp (src.c_str(),p_c_call,6) == 0) && (strcmp ("1",p_c_ctrlx) == 0)) 
+{
+printf ("DMRGateway mode\n");
+system("mm_gate");
+}
+
+else if ((strcmp (p_c_ctrl4,dst.c_str()) ==0) && (strncmp (src.c_str(),p_c_call,6) == 0) && (strcmp ("1",p_c_ctrlx) == 0)) 
+{
+printf ("BrandMeister mode\n");
+system("mm_convencional");
+}
+
+
 		::sprintf(text, "t3.txt=\"%s%s\"", group ? "TG: " : "", dst.c_str());
 
 
 // Compare TG and write Flags
 
-for (int flag=0;flag<65;flag=flag+1)
+for (int flag=0;flag<131;flag=flag+1)
 {
+//cout<<flag<<"\n";
 if (strcmp (p_c_str_[flag],dst.c_str()) ==0) {
         char text[130U];
 int pi=flag+30;
