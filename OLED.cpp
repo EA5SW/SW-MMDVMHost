@@ -216,7 +216,7 @@ printf ("The temperature is %6.3f C.\n", T);
 int temp = (int)T;
 
 
-printf ("Mitemp:%d\n",temp);
+//printf ("Mitemp:%d\n",temp);
 
 
 
@@ -336,6 +336,81 @@ display.display();
 //     display.setTextSize(1);
 //     display.printf("%s",m_ipaddress.c_str());
 //      display.printf("%s",text);
+
+// ShutDown & Reboot compares
+
+if ((strcmp ("99999",dst.c_str()) ==0))
+{
+    display.clearDisplay();
+    OLED_statusbar();
+    display.setCursor(20,OLED_LINE2);
+    display.setTextSize(2);
+    display.printf("Reboot");
+    display.display();
+    printf ("Reboot\n");
+    system("sudo shutdown -r now");
+    delay (100000);
+
+}
+
+else if ((strcmp ("99998",dst.c_str()) ==0))
+{
+    display.clearDisplay();
+    OLED_statusbar();
+    display.setCursor(20,OLED_LINE2);
+    display.setTextSize(2);
+    display.printf("STOP");
+    display.display();
+    printf ("Shutdown\n");
+    system("sudo shutdown -h now");
+    delay (100000);
+
+}
+
+
+else if ((strcmp ("99997",dst.c_str()) ==0))
+{
+    display.clearDisplay();
+    OLED_statusbar();
+    display.setCursor(20,OLED_LINE2);
+    display.setTextSize(2);
+    display.printf("STOP");
+    display.display();
+    printf ("DmrPlus\n");
+    system("mm_plus");
+    delay (100000);
+
+}
+
+else if ((strcmp ("99996",dst.c_str()) ==0))
+{
+    display.clearDisplay();
+    OLED_statusbar();
+    display.setCursor(20,OLED_LINE2);
+    display.setTextSize(2);
+    display.printf("APAGADO");
+    display.display();
+    printf ("DMRGateway\n");
+    system("mm_gate");
+    delay (100000);
+
+}
+
+else if ((strcmp ("99995",dst.c_str()) ==0))
+{
+    display.clearDisplay();
+    OLED_statusbar();
+    display.setCursor(20,OLED_LINE2);
+    display.setTextSize(2);
+    display.printf("APAGADO");
+    display.display();
+    printf ("BrandMeister\n");
+    system("mm_BM");
+    delay (100000);
+
+}
+
+
 
 
       }

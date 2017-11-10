@@ -151,39 +151,42 @@ void CNextion::setIdleInt()
 // INI File Read
 
    typedef INI<> ini_t; 
-   ini_t ini("/home/pi/Nextion.ini", true);
+   ini_t ini("/home/pi/MMDVMHost/etc/Nextion.ini", true);
  //  centerString("Reading Nextion.ini");
 
    ini.select("Info");
    string loc1= ini.get("Location");
    string fre1= ini.get("Freq");
    string net1= ini.get("Net");
- //  cout <<"Loc:" <<loc1 <<" Freq:" <<fre1 <<" Net:" <<net1 <<"\n";
-
-
-
-
-     ini.clear();
-     ini.parse();  //Parses file into objects in memory
+//  cout <<"Loc:" <<loc1 <<" Freq:" <<fre1 <<" Net:" <<net1 <<"\n";
 
  
 
 	sendCommand("page MMDVM");
 
-	char command[20];
-	::sprintf(command, "dim=%u", m_idleBrightness);
-	sendCommand(command);
-	char command1[20U];
+
+	char command0[40];
+	::sprintf(command0, "dim=%u", m_idleBrightness);
+	sendCommand(command0);
+
+
+	char command1[40U];
 	::sprintf(command1, "t0.txt=\"%s/%u\"", m_callsign.c_str(), m_dmrid);
 	sendCommand(command1);
-	char command2[20U];
+
+	char command2[40U];
         ::sprintf(command2, "t30.txt=\"%s\"", loc1.c_str());
 	sendCommand(command2);
-	char command3[20U];
+
+	char command3[40U];
         ::sprintf(command3, "t31.txt=\"%s\"", fre1.c_str());      
 	sendCommand(command3);
-	char command4[20U];
-        ::sprintf(command4, "t1.txt=\"%s\"", net1.c_str());
+
+	char command4[40U];
+//        ::sprintf(command4, "t1.txt=\"%s\"", net1.c_str());
+// Net hardcoded for this Pi image
+        ::sprintf(command4, "t1.txt=\"DMRGateway\"");
+
 	sendCommand(command4);
 
 
@@ -202,6 +205,11 @@ void CNextion::setIdleInt()
 	m_clockDisplayTimer.start();
 
 	m_mode = MODE_IDLE;
+
+     ini.clear();
+     ini.parse();
+  //Parses file into objects in memory
+
 }
 
 
@@ -378,7 +386,7 @@ if (strcmp(type,"R") == 0) {
 // INI Read Section TG & Callsign
 
    typedef INI<> ini_t; 
-   ini_t ini("/home/pi/Nextion.ini", true);
+   ini_t ini("/home/pi/MMDVMHost/etc/Nextion.ini", true);
 
 // READ INI TALKGROUPS
 
@@ -513,7 +521,7 @@ close();
 else if ((strcmp (p_c_ctrl2,dst.c_str()) ==0) && (strncmp (src.c_str(),p_c_call,6) == 0) && (strcmp ("1",p_c_ctrlx) == 0)) 
 {
 printf ("DmrPlusmode\n");
-system("mm_dmrplus");
+system("mm_plus");
 }
 
 else if ((strcmp (p_c_ctrl3,dst.c_str()) ==0) && (strncmp (src.c_str(),p_c_call,6) == 0) && (strcmp ("1",p_c_ctrlx) == 0)) 
@@ -525,7 +533,7 @@ system("mm_gate");
 else if ((strcmp (p_c_ctrl4,dst.c_str()) ==0) && (strncmp (src.c_str(),p_c_call,6) == 0) && (strcmp ("1",p_c_ctrlx) == 0)) 
 {
 printf ("BrandMeister mode\n");
-system("mm_convencional");
+system("mm_BM");
 }
 
 
