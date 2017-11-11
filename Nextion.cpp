@@ -576,6 +576,12 @@ else if (strcmp ("9990",dst.c_str()) ==0) {
 	::sprintf(text, "p5.pic=7");
 	sendCommand(text);
 }
+else if (strcmp ("6",dst.c_str()) ==0) {
+        char text[130U];
+	::sprintf(text, "p5.pic=13");
+	sendCommand(text);
+}
+
 else 
  {
 // No group programmed
@@ -1087,7 +1093,7 @@ void CNextion::close()
 {
 	sendCommand("page MMDVM");
 	sendCommand("t1.txt=\"MMDVM STOP\"");
-	sendCommand("t0.txt=\"MMDVM PARADO\"");
+	sendCommand("t0.txt=\"MMDVM STOP\"");
 	sendCommand("t30.txt=\"MMDVM STOP\"");
 	m_serial->close();
 	delete m_serial;

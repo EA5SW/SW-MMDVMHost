@@ -197,10 +197,7 @@ void COLED::setIdleInt()
 //    display.setTextSize(1);
 //    display.startscrolldiagright(0x00,0x0f);  //the MMDVM logo scrolls the whole screen
 display.startscrollleft(0x00,0x0f); 
-//    display.setCursor(0,OLED_LINE4);
-      display.setTextSize(1);
-      display.printf("\n\n");
-      display.printf("%s",m_ipaddress.c_str());
+//      display.setCursor(0,OLED_LINE5);
 
 // Temperatura
 
@@ -211,7 +208,7 @@ if (temperatureFile == NULL)
   ; //print some message
 fscanf (temperatureFile, "%lf", &T);
 T /= 1000;
-printf ("The temperature is %6.3f C.\n", T);
+//printf ("The temperature is %6.3f C.\n", T);
 
 int temp = (int)T;
 
@@ -219,13 +216,17 @@ int temp = (int)T;
 //printf ("Mitemp:%d\n",temp);
 
 
-
+      display.setCursor(0,OLED_LINE1);
       display.setTextSize(2);
       display.printf("\n");
      display.printf("Temp:%d",temp);
 
 fclose (temperatureFile);
 
+      display.setCursor(0,OLED_LINE4);
+      display.setTextSize(1);
+//    display.printf("\n\n");
+      display.printf("%s",m_ipaddress.c_str());
 
 
 
@@ -349,7 +350,7 @@ if ((strcmp ("99999",dst.c_str()) ==0))
     display.display();
     printf ("Reboot\n");
     system("sudo shutdown -r now");
-    delay (100000);
+    delay (1000);
 
 }
 
@@ -363,7 +364,7 @@ else if ((strcmp ("99998",dst.c_str()) ==0))
     display.display();
     printf ("Shutdown\n");
     system("sudo shutdown -h now");
-    delay (100000);
+    delay (1000);
 
 }
 
@@ -374,11 +375,11 @@ else if ((strcmp ("99997",dst.c_str()) ==0))
     OLED_statusbar();
     display.setCursor(20,OLED_LINE2);
     display.setTextSize(2);
-    display.printf("STOP");
+    display.printf("Load +");
     display.display();
     printf ("DmrPlus\n");
     system("mm_plus");
-    delay (100000);
+    delay (100);
 
 }
 
@@ -388,11 +389,11 @@ else if ((strcmp ("99996",dst.c_str()) ==0))
     OLED_statusbar();
     display.setCursor(20,OLED_LINE2);
     display.setTextSize(2);
-    display.printf("APAGADO");
+    display.printf("Load Gate");
     display.display();
     printf ("DMRGateway\n");
     system("mm_gate");
-    delay (100000);
+    delay (100);
 
 }
 
@@ -402,11 +403,11 @@ else if ((strcmp ("99995",dst.c_str()) ==0))
     OLED_statusbar();
     display.setCursor(20,OLED_LINE2);
     display.setTextSize(2);
-    display.printf("APAGADO");
+    display.printf("Load BM");
     display.display();
     printf ("BrandMeister\n");
     system("mm_BM");
-    delay (100000);
+    delay (100);
 
 }
 
@@ -453,8 +454,8 @@ if (m_mode != MODE_DMR) {
 	::sprintf(text, "%s",talkerAlias);
 	if (strlen((char*)talkerAlias)>16-4)
 
-printf ("%s%s\n","TalkerAlias>16:",text);
-
+//printf ("%s%s\n","TalkerAlias>16:",text);
+;
 //display.fillRect(0,OLED_LINE4,display.width(),10,BLACK);
 display.setCursor(0,OLED_LINE4);
 display.printf("%s%s","TA:",text);
@@ -462,16 +463,16 @@ display.printf("%s%s","TA:",text);
 
 	if (strlen((char*)talkerAlias)>20-4)
 
-printf ("%s%s\n","TalkerAlias>20:",text);
-
+//printf ("%s%s\n","TalkerAlias>20:",text);
+;
 //display.setCursor(0,OLED_LINE4);
 //display.printf("%s",text);
 
 
 if (strlen((char*)talkerAlias)>24-4)
 
-printf ("%s%s\n","TalkerAlias:>24",text);
-
+//printf ("%s%s\n","TalkerAlias:>24",text);
+;
 
 
 //display.setCursor(0,OLED_LINE4);
@@ -611,5 +612,6 @@ void COLED::OLED_statusbar()
       display.drawBitmap(0, 0, logo_glcd_bmp, 128, 16, WHITE);
 
     if (m_displayScroll)
-      display.startscrollright(0x00,0x02);
+//      display.startscrollright(0x00,0x02);
+;
 }
